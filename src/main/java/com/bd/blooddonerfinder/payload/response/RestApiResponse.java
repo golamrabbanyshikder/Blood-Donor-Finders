@@ -10,13 +10,17 @@ public class RestApiResponse<T>  {
     private T data;
     private HttpStatus status;
     private String message;
-
-    public static <T> RestApiResponse<T> success(T data, String message) {
+    private List<T> datas;
+    
+    public static <T> RestApiResponse<T> success(T data, String message,List<T> datas) {
         RestApiResponse<T> response = new RestApiResponse<>();
         response.setData(data);
         response.setStatus(HttpStatus.OK);
         response.setMessage(message);
+        response.setDatas(datas);
         return response;
     }
+
+	
 
 }
