@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MQTT Web Client</title>
+</head>
+<body>
+  <h1>MQTT Web Client</h1>
+  <div id="messages"></div>
+
+  <!-- Include MQTT.js from CDN -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script>
+    // WebSocket URL for EMQX broker (adjust if you have your own broker)
+    const url = 'ws://localhost:8083/mqtt';
+
+    const options = {
+      clean: true,
+      connectTimeout: 4000,
+      clientId: 'ctrends_ebs',
+      username: 'admin',
+      password: 'EMQ@123456',
+    };
+
+    const client = mqtt.connect(url, options);
+
+    client.on('connect', () => {
+      console.log('Connected to MQTT broker over WebSocket');
+      client.subscribe('ctsTesttopic', (err) => {
+        if (!err) {
+           console.error('Subscribe Sucessfully:');
+        } else {
+          console.error('Subscribe error:', err);
+        }
+      });
+    });
+
+    client.on('message', (topic, message) => {
+      const msg = message.toString();
+      console.log(`Received on ${topic}: ${msg}`);
+      alert(`📩 Topic: ${topic}\nMessage: ${msg}`);
+    });
+
+    client.on('error', (err) => {
+      console.error('Connection error:', err);
+    });
+
+    client.on('reconnect', () => {
+      console.log('Reconnecting...');
+    });
+  </script>
+</body>
+</html>
